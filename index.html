@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esport Adda - Gaming Tournament Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://i.postimg.cc/NLhf6Kys/esportadda.png" alt="Esport Adda" class="logo">
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#games">Games</a>
+                <a class="nav-link" href="#tournaments">Tournaments</a>
+                <a class="nav-link" href="#leaderboard">Leaderboard</a>
+                <button class="nav-link btn btn-primary login-btn" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome to Esport Adda</h1>
+                <p>Join competitive tournaments in PUBG, Free Fire, COD and more!</p>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="games" class="games-section">
+            <div class="container">
+                <h2>Featured Games</h2>
+                <div class="games-grid">
+                    <!-- Game cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Tournaments Section -->
+        <section id="tournaments" class="tournaments-section">
+            <div class="container">
+                <h2>Live Tournaments</h2>
+                <div class="tournaments-grid">
+                    <!-- Tournament cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Auth Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Auth forms will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

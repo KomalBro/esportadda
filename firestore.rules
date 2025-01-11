@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAdmin() {
+      return request.auth != null && 
+             request.auth.token.email == 'admin@esportadda.com';
+    }
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Validate amount fields
+    function isValidAmount(amount) {
+      return amount is number && amount > 0;
+    }
+
+    // Validate status transitions
+    function isValidStatusTransition(oldStatus, newStatus) {
+      let validTransitions = {
+        'pending': ['processing', 'rejected'],
+        'processing': ['completed', 'rejected'],
+        'completed': [],
+        'rejected': []
+      };
+      return oldStatus in validTransitions 
+        && newStatus in validTransitions[oldStatus];
+    }
+
+    // Support Tickets Collection
+    match /support_tickets/{ticketId} {
+      allow read: if isAuthenticated() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        isAdmin() || 
+        (isOwner(resource.data.userId) && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['messages']))
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Transactions Collection
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid &&
+        isValidAmount(request.resource.data.amount);
+      allow update: if isAdmin() && 
+        isValidStatusTransition(resource.data.status, request.resource.data.status);
+      allow delete: if false; // Never allow deletion of transactions
+    }
+
+    // Withdrawals Collection
+    match /withdrawals/{withdrawalId} {
+      allow read: if isAuthenticated() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid &&
+        isValidAmount(request.resource.data.amount) &&
+        request.resource.data.status == 'pending';
+      allow update: if isAdmin() && 
+        isValidStatusTransition(resource.data.status, request.resource.data.status);
+      allow delete: if false; // Never allow deletion of withdrawals
+    }
+
+    // Activity Collection
+    match /activity/{activityId} {
+      allow read: if isAuthenticated() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Activities should never be modified or deleted
+    }
+
+    // Settings Collection (existing)
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Games Collection (existing)
+    match /games/{gameId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Users Collection (existing)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin() || isOwner(userId);
+      allow delete: if isAdmin();
+    }
+
+    // Tournaments Collection (existing)
+    match /tournaments/{tournamentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

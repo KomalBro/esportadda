@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esport Adda Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="admin-style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler d-md-none" type="button" id="toggleSidebar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="Esport Adda Logo" height="30">
+                Esport Adda Admin
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3 admin-email"></span>
+                <button class="btn btn-outline-light btn-sm" id="signOut">Sign Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#games">
+                        <i class="fas fa-gamepad"></i>
+                        Games
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tournaments">
+                        <i class="fas fa-trophy"></i>
+                        Tournaments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#transactions">
+                        <i class="fas fa-exchange-alt"></i>
+                        Transactions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#withdrawals">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Withdrawals
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#support">
+                        <i class="fas fa-headset"></i>
+                        Support
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#activity">
+                        <i class="fas fa-chart-line"></i>
+                        Activity Logs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#settings">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="section active">
+            <div class="container-fluid">
+                <h2 class="mb-4">Dashboard</h2>
+                
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6>Total Users</h6>
+                                <h3 id="total-users">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6>Today's Revenue</h6>
+                                <h3 id="today-revenue">₹0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6>Active Matches</h6>
+                                <h3 id="active-matches">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h6>Pending Withdrawals</h6>
+                                <h3 id="pending-withdrawals">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="row">
+                    <div class="col-md-8 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Recent Matches</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Game</th>
+                                                <th>Date</th>
+                                                <th>Prize Pool</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recent-matches">
+                                            <!-- Matches will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Recent Transactions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="recent-transactions">
+                                    <!-- Transactions will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users-section" class="section d-none">
+            <!-- Users content -->
+        </section>
+
+        <!-- Games Section -->
+        <section id="games-section" class="section d-none">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Games Management</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGameModal">
+                        <i class="fas fa-plus"></i> Add Game
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Game</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gamesList">
+                                    <!-- Games will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tournaments Section -->
+        <section id="tournaments-section" class="section d-none">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Tournament Management</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTournamentModal">
+                        <i class="fas fa-plus"></i> Create Tournament
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Game</th>
+                                        <th>Start Date</th>
+                                        <th>Entry Fee</th>
+                                        <th>Prize Pool</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tournamentsList">
+                                    <!-- Tournaments will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section id="transactions-section" class="section d-none">
+            <div class="container-fluid">
+                <h2 class="mb-4">Transaction History</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>User</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsList">
+                                    <!-- Transactions will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Withdrawals Section -->
+        <section id="withdrawals-section" class="section d-none">
+            <div class="container-fluid">
+                <h2 class="mb-4">Withdrawal Requests</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="withdrawalsList">
+                                    <!-- Withdrawals will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matches Section -->
+        <section id="matches-section" class="section d-none">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Matches</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMatchModal">
+                        <i class="fas fa-plus"></i> Add Match
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Match tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#ongoing">Ongoing</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#completed">Completed</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="upcoming">
+                                <!-- Upcoming matches table -->
+                            </div>
+                            <div class="tab-pane fade" id="ongoing">
+                                <!-- Ongoing matches table -->
+                            </div>
+                            <div class="tab-pane fade" id="completed">
+                                <!-- Completed matches table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wallet Section -->
+        <section id="wallet-section" class="section d-none">
+            <div class="container-fluid">
+                <h2 class="mb-4">Wallet Management</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Add Balance</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="add-balance-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">User ID</label>
+                                        <input type="text" class="form-control" id="wallet-user-id" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Amount</label>
+                                        <input type="number" class="form-control" id="wallet-amount" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Note</label>
+                                        <textarea class="form-control" id="wallet-note" rows="2"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Balance</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Recent Transactions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="wallet-transactions">
+                                    <!-- Transactions will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section id="support-section" class="section d-none">
+            <div class="container-fluid">
+                <h2 class="mb-4">Support Tickets</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#open-tickets">Open Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#closed-tickets">Closed Tickets</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="open-tickets">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>User</th>
+                                                <th>Subject</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="open-tickets-list">
+                                            <!-- Open tickets will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="closed-tickets">
+                                <!-- Closed tickets table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="section d-none">
+            <div class="container-fluid">
+                <h2 class="mb-4">Settings</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form id="settings-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Platform Name</label>
+                                        <input type="text" class="form-control" id="platform-name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Contact Email</label>
+                                        <input type="email" class="form-control" id="contact-email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Minimum Withdrawal Amount</label>
+                                        <input type="number" class="form-control" id="min-withdrawal" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Platform Fee (%)</label>
+                                        <input type="number" class="form-control" id="platform-fee" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Match Modal -->
+    <div class="modal fade" id="addMatchModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Match</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-match-form">
+                        <div class="mb-3">
+                            <label class="form-label">Game</label>
+                            <select class="form-select" id="match-game" required>
+                                <option value="BGMI">BGMI</option>
+                                <option value="Free Fire">Free Fire</option>
+                                <option value="COD Mobile">COD Mobile</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Match Type</label>
+                            <select class="form-select" id="match-type" required>
+                                <option value="Solo">Solo</option>
+                                <option value="Duo">Duo</option>
+                                <option value="Squad">Squad</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Entry Fee</label>
+                            <input type="number" class="form-control" id="match-fee" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prize Pool</label>
+                            <input type="number" class="form-control" id="match-prize" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Map</label>
+                            <input type="text" class="form-control" id="match-map" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Time</label>
+                            <input type="datetime-local" class="form-control" id="match-time" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Match</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5gs25IDoXVUOJE_UF5UzVR_AuHeMMMjk",
+            authDomain: "esportadda.firebaseapp.com",
+            projectId: "esportadda",
+            storageBucket: "esportadda.appspot.com",
+            messagingSenderId: "1048519133454",
+            appId: "1:1048519133454:web:24648591d22e3c21e6ac33",
+            measurementId: "G-PXQXKRGJDK"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make Firebase instances available globally
+        window.auth = auth;
+        window.db = db;
+    </script>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script type="module" src="admin.js"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (toggleSidebar && sidebar) {
+                toggleSidebar.addEventListener('click', () => {
+                    sidebar.classList.toggle('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
